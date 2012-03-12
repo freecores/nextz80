@@ -160,7 +160,7 @@ module ALU8(
 				FOUT[3] = ALU8DOUT[11];
 				FOUT[4] = hf ^ OP[1];
 				FOUT[5] = ALU8DOUT[13];
-				FOUT[6] = (EXOP[5] & DSTHI) ? (zero & FIN[6]) : zero;				// adc16/sbc16
+				FOUT[6] = zero & (FIN[6] | ~EXOP[5] | ~DSTHI | OP[3]); //(EXOP[5] & DSTHI) ? (zero & FIN[6]) : zero;				// adc16/sbc16
 				FOUT[7] = ALU8DOUT[15];
 			end
 			16,17:	begin		// ADD16LO, ADD16HI

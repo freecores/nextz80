@@ -83,54 +83,26 @@ module Z80Reg(
 	
 //------------------------------------ RAM block registers ----------------------------------
 // 0:BC, 1:DE, 2:HL, 3:A-x, 4:I-x, 5:IX, 6:IY, 7:x-x, 8:BC', 9:DE', 10:HL', 11:A'-x, 12: tmpSP, 13:zero
-   RAM16X1D #(
-      .INIT(16'h0000) 		// Initial contents of RAM
-   ) RAM16X1D_bit0 (
-      .DPO(rdor[0]),     	// Read-only 1-bit data output
-      .SPO(rdow[0]),     	// Rw/ 1-bit data output
-      .A0(SELW[0]),       	// Rw/ address[0] input bit
-      .A1(SELW[1]),       	// Rw/ address[1] input bit
-      .A2(SELW[2]),       	// Rw/ address[2] input bit
-      .A3(SELW[3]),       	// Rw/ address[3] input bit
-      .D(DIN[0]),         	// Write 1-bit data input
-      .DPRA0(SELR[0]), 		// Read-only address[0] input bit
-      .DPRA1(SELR[1]), 		// Read-only address[1] input bit
-      .DPRA2(SELR[2]), 		// Read-only address[2] input bit
-      .DPRA3(SELR[3]), 		// Read-only address[3] input bit
+   RAM16X8D_regs regs_lo (
+      .DPO(rdor[7:0]),     	// Read-only 1-bit data output
+      .SPO(rdow[7:0]),     	// Rw/ 1-bit data output
+      .A(SELW),       	// Rw/ address[0] input bit
+      .D(DIN[7:0]),         	// Write 1-bit data input
+      .DPRA(SELR), 		// Read-only address[0] input bit
       .WCLK(CLK),   			// Write clock input
       .WE(WE[0] & !WAIT)        	// Write enable input
    );
 
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit1 (.DPO(rdor[1]), .SPO(rdow[1]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[1]),  
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit2 (.DPO(rdor[2]), .SPO(rdow[2]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[2]),     
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit3 (.DPO(rdor[3]), .SPO(rdow[3]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[3]), 
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit4 (.DPO(rdor[4]), .SPO(rdow[4]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[4]), 
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit5 (.DPO(rdor[5]), .SPO(rdow[5]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[5]),    
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit6 (.DPO(rdor[6]), .SPO(rdow[6]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[6]),    
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit7 (.DPO(rdor[7]), .SPO(rdow[7]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[7]),
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[0] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit8 (.DPO(rdor[8]), .SPO(rdow[8]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[8]),
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit9 (.DPO(rdor[9]), .SPO(rdow[9]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[9]),    
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit10(.DPO(rdor[10]), .SPO(rdow[10]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[10]),   
-																 .DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit11(.DPO(rdor[11]), .SPO(rdow[11]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[11]),    
-																 .DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit12(.DPO(rdor[12]), .SPO(rdow[12]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[12]), 
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit13(.DPO(rdor[13]), .SPO(rdow[13]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[13]),
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit14(.DPO(rdor[14]), .SPO(rdow[14]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[14]), 
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
-   RAM16X1D #(.INIT(16'h0000)) RAM16X1D_bit15(.DPO(rdor[15]), .SPO(rdow[15]), .A0(SELW[0]), .A1(SELW[1]), .A2(SELW[2]), .A3(SELW[3]), .D(DIN[15]),
-																.DPRA0(SELR[0]), .DPRA1(SELR[1]), .DPRA2(SELR[2]), .DPRA3(SELR[3]), .WCLK(CLK), .WE(WE[1] & !WAIT));
+   RAM16X8D_regs regs_hi (
+      .DPO(rdor[15:8]),     	// Read-only 1-bit data output
+      .SPO(rdow[15:8]),     	// Rw/ 1-bit data output
+      .A(SELW),       	// Rw/ address[0] input bit
+      .D(DIN[15:8]),         	// Write 1-bit data input
+      .DPRA(SELR), 		// Read-only address[0] input bit
+      .WCLK(CLK),   			// Write clock input
+      .WE(WE[1] & !WAIT)        	// Write enable input
+   );
+
 	wire [15:0]ADDR1 = ADDR + !ALU16OP[2]; // address post increment
 	wire [7:0]flgmux = {ALU8FLAGS[7:3], SELR[3:0] == 4'b0100 ? rstatus[7] : ALU8FLAGS[2], ALU8FLAGS[1:0]}; // LD A, I/R IFF2 flag on parity
 	always @(posedge CLK)
@@ -206,3 +178,22 @@ module RegSelect(
 		endcase
 	end
 endmodule	
+
+module RAM16X8D_regs(
+      output [7:0]DPO,     	// Read-only 1-bit data output
+      output [7:0]SPO,     	// Rw/ 1-bit data output
+      input [3:0]A,       	// Rw/ address[0] input bit
+      input [7:0]D,         	// Write 1-bit data input
+      input [3:0]DPRA, 		// Read-only address[0] input bit
+      input WCLK,   			// Write clock input
+      input [1:0]WE        	// Write enable input
+   );
+	
+	reg [7:0]data[15:0];
+	assign DPO = data[DPRA];
+	assign SPO = data[A];
+	
+	always @(posedge WCLK)
+		if(WE) data[A] <= D;		
+
+endmodule

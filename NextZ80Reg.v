@@ -84,23 +84,23 @@ module Z80Reg(
 //------------------------------------ RAM block registers ----------------------------------
 // 0:BC, 1:DE, 2:HL, 3:A-x, 4:I-x, 5:IX, 6:IY, 7:x-x, 8:BC', 9:DE', 10:HL', 11:A'-x, 12: tmpSP, 13:zero
    RAM16X8D_regs regs_lo (
-      .DPO(rdor[7:0]),     	// Read-only 1-bit data output
-      .SPO(rdow[7:0]),     	// Rw/ 1-bit data output
-      .A(SELW),       	// Rw/ address[0] input bit
-      .D(DIN[7:0]),         	// Write 1-bit data input
-      .DPRA(SELR), 		// Read-only address[0] input bit
-      .WCLK(CLK),   			// Write clock input
-      .WE(WE[0] & !WAIT)        	// Write enable input
+      .DPO(rdor[7:0]),   // Read-only data output
+      .SPO(rdow[7:0]),   // R/W data output
+      .A(SELW),       	 // R/W address
+      .D(DIN[7:0]),      // Write data input
+      .DPRA(SELR), 		 // Read-only address
+      .WCLK(CLK),   		 // Write clock input
+      .WE(WE[0] & !WAIT) // Write enable input
    );
 
    RAM16X8D_regs regs_hi (
-      .DPO(rdor[15:8]),     	// Read-only 1-bit data output
-      .SPO(rdow[15:8]),     	// Rw/ 1-bit data output
-      .A(SELW),       	// Rw/ address[0] input bit
-      .D(DIN[15:8]),         	// Write 1-bit data input
-      .DPRA(SELR), 		// Read-only address[0] input bit
-      .WCLK(CLK),   			// Write clock input
-      .WE(WE[1] & !WAIT)        	// Write enable input
+      .DPO(rdor[15:8]),  // Read-only data output
+      .SPO(rdow[15:8]),  // R/W data output
+      .A(SELW),       	 // R/W address
+      .D(DIN[15:8]),     // Write data input
+      .DPRA(SELR), 		 // Read-only address
+      .WCLK(CLK),   		 // Write clock input
+      .WE(WE[1] & !WAIT) // Write enable input
    );
 
 	wire [15:0]ADDR1 = ADDR + !ALU16OP[2]; // address post increment
@@ -180,13 +180,13 @@ module RegSelect(
 endmodule	
 
 module RAM16X8D_regs(
-      output [7:0]DPO,     	// Read-only 1-bit data output
-      output [7:0]SPO,     	// Rw/ 1-bit data output
-      input [3:0]A,       	// Rw/ address[0] input bit
-      input [7:0]D,         	// Write 1-bit data input
-      input [3:0]DPRA, 		// Read-only address[0] input bit
-      input WCLK,   			// Write clock input
-      input [1:0]WE        	// Write enable input
+      output [7:0]DPO,     // Read-only data output
+      output [7:0]SPO,     // R/W data output
+      input [3:0]A,       	// R/W address 
+      input [7:0]D,        // Write data input
+      input [3:0]DPRA, 		// Read-only address
+      input WCLK,   			// Write clock
+      input [1:0]WE        // Write enable
    );
 	
 	reg [7:0]data[15:0];

@@ -186,7 +186,7 @@ module RAM16X8D_regs(
       input [7:0]D,        // Write data input
       input [3:0]DPRA, 		// Read-only address
       input WCLK,   			// Write clock
-      input [1:0]WE        // Write enable
+      input WE        		// Write enable
    );
 	
 	reg [7:0]data[15:0];

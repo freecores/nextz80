@@ -317,53 +317,32 @@ endmodule
 module daa (
 	input [7:0]flags,
 	input [7:0]val,
-	output reg [7:0]adjust,
+	output wire [7:0]adjust,
 	output reg cdaa,
 	output reg hdaa
 	);
 	
 	wire h08 = val[7:4] < 9;
 	wire h09 = val[7:4] < 10;
-	wire l09 = val[3:0] < 10;
 	wire l05 = val[3:0] < 6;
-	
-	reg [1:0]adj;
+	wire l09 = val[3:0] < 10;
+	reg [1:0]aa;
+	assign adjust = ({1'b0, aa[1], aa[1], 2'b0, aa[0], aa[0], 1'b0} ^ {8{flags[1]}}) + flags[1];
 	
 	always @* begin
 		case({flags[0], h08, h09, flags[4], l09})
-			5'b00101, 5'b01101:	adj = 0;
-			5'b00111, 5'b01111:	adj = 1;
-			5'b01000, 5'b01010, 5'b01100, 5'b01110:	adj = 1;
-			5'b00001, 5'b01001:	adj = 2;
-			5'b10001, 5'b10101, 5'b11001, 5'b11101:	adj = 2;
-			5'b10011, 5'b10111, 5'b11011, 5'b11111:	adj = 3;
-			5'b10000, 5'b10010, 5'b10100, 5'b10110, 5'b11000, 5'b11010, 5'b11100, 5'b11110:	adj = 3;
-			5'b00000, 5'b00010, 5'b00100, 5'b00110:	adj = 3;
-			5'b00011, 5'b01011:	adj = 3;
-		endcase
-		case({flags[1], adj[1:0]})
-			0:	adjust = 0;
-			1:	adjust = 6;
-			2: adjust = 8'h60;
-			3: adjust = 8'h66;
-			4:	adjust = 0;
-			5: adjust = 8'hfa;
-			6:	adjust = 8'ha0;
-			7:	adjust = 8'h9a;
+			5'b00101, 5'b01101:	aa = 0;
+			5'b00111, 5'b01111, 5'b01000, 5'b01010, 5'b01100, 5'b01110:	aa = 1;
+			5'b00001, 5'b01001, 5'b10001, 5'b10101, 5'b11001, 5'b11101:	aa = 2;
+			default: aa = 3;
 		endcase
 		case({flags[0], h08, h09, l09})
-			4'b0011, 4'b0111:	cdaa = 0;
-			4'b0100, 4'b0110:	cdaa = 0;
-			4'b0000, 4'b0010:	cdaa = 1;
-			4'b0001, 4'b0101:	cdaa = 1;
-			4'b1000, 4'b1001, 4'b1010, 4'b1011, 4'b1100, 4'b1101, 4'b1110, 4'b1111:	cdaa = 1;
+			4'b0011, 4'b0111, 4'b0100, 4'b0110:	cdaa = 0;
+			default: cdaa = 1;
 		endcase
 		case({flags[1], flags[4], l05, l09})
-			4'b0001, 4'b0011, 4'b0101, 4'b0111:	hdaa = 0;
-			4'b0000, 4'b0010, 4'b0100, 4'b0110:	hdaa = 1;
-			4'b1000, 4'b1001, 4'b1010, 4'b1011:	hdaa = 0;
-			4'b1100, 4'b1101:	hdaa = 0;
-			4'b1110, 4'b1111:	hdaa = 1;
+			4'b0000, 4'b0010, 4'b0100, 4'b0110, 4'b1110, 4'b1111:	hdaa = 1;
+			default:	hdaa = 0;
 		endcase
 	end
 endmodule

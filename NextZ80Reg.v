@@ -110,8 +110,8 @@ module Z80Reg(
 			if(WE[2]) th <= DI;
 			if(WE[3]) sp <= ADDR1;
 			if(WE[4]) pc <= ADDR1;
-			if({SELW[3:0], WE[0]} == 5'b01001) r <= ALU8OUT[7:0]; 
-			else if(M1) r[6:0] <= r[6:0] + 7'b0000001;
+			if({REG_WSEL, WE[0]} == 5'b10011) r <= ALU8OUT[7:0]; 
+			else if(M1) r[6:0] <= r[6:0] + 1;
 			if(WE[5])
 				if(rstatus[0]) flg[15:8] <= flgmux;
 				else flg[7:0] <= flgmux;

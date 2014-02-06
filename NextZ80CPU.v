@@ -1146,7 +1146,7 @@ module NextZ80
 								DINW_SEL = 1'b0;					// ALU8OUT
 								WE 		= {4'b010x, !FETCH[3], FETCH[3]};	// PC, hi/lo
 								ALU8OP	= 29;						// pass D1
-								REG_WSEL	= 4'b100x;				// IR
+								REG_WSEL	= 4'b1001;				// IR, write r
 								REG_RSEL	= 4'b0110;				// A
 							end
 							2'b01: begin	// LD A I/R
@@ -1404,7 +1404,7 @@ module NextZ80
 					WE 		= 6'bx1xx11;			// PC, hi, lo
 					ALU8OP	= 29;						// pass D1
 					ALU16OP	= 4;						// NOP
-					REG_WSEL	= 4'b010x;				// IR
+					REG_WSEL	= 4'b1001;				// IR, write r
 					REG_RSEL	= 4'b110x;				// const
 					M1 		= 0;
 					MREQ		= 0;
@@ -1458,7 +1458,7 @@ module NextZ80
 								WE 		= 6'b010x01;		// PC, lo
 								ALU16OP	= intop;				// DEC/DEC2 (if block instruction interrupted)
 								next_stage = 1;
-								REG_WSEL	= 4'b100x;			// Itmp
+								REG_WSEL	= 4'b1000;			// Itmp, no write r
 								MREQ		= 0;
 								IORQ		= 1;
 								status[11]	= 1'b1;
